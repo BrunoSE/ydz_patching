@@ -1,0 +1,33 @@
+From 60b36b145f804eb55b256fcc67841f48aa68fa53 Mon Sep 17 00:00:00 2001
+From: Bruno Stefoni <bruno.stefoni@cloudwerx.tech>
+Date: Thu, 8 Feb 2024 06:10:57 -0500
+Subject: [PATCH] added 3rd
+
+---
+ train_network.py | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/train_network.py b/train_network.py
+index d9ae2fa..ff1686f 100644
+--- a/train_network.py
++++ b/train_network.py
+@@ -131,11 +131,11 @@ class NetworkTrainer:
+     def all_reduce_network(self, accelerator, network):
+         for param in network.parameters():
+             if param.grad is not None:
+-                print(f"Size of param.grad before reduction: {param.grad.size()}")
+-                aux = accelerator.reduce(param.grad, reduction="mean")
+-                print(f"Size of aux param.grad after reduction: {aux.size()}")
+-                param.grad = accelerator.reduce(param.grad, reduction="mean")
+-                print(f"Size of param.grad after reduction: {param.grad.size()}")
++                # print(f"Size of param.grad before reduction: {param.grad.size()}")
++                # print(f"Size of aux param.grad after reduction: {aux.size()}")
++                if accelerator.reduce(param.grad, reduction="mean").numel() > 0:
++                    param.grad = accelerator.reduce(param.grad, reduction="mean")
++                    print(f"Size of param.grad after reduction: {param.grad.size()}")
+ 
+     def sample_images(self, accelerator, args, epoch, global_step, device, vae, tokenizer, text_encoder, unet):
+         train_util.sample_images(accelerator, args, epoch, global_step, device, vae, tokenizer, text_encoder, unet)
+-- 
+2.39.3 (Apple Git-145)
+
