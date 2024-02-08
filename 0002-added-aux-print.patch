@@ -1,0 +1,25 @@
+From 5716434c6d738793348ed4d4dde95979ae4dff8f Mon Sep 17 00:00:00 2001
+From: Bruno Stefoni <bruno.stefoni@cloudwerx.tech>
+Date: Thu, 8 Feb 2024 05:37:03 -0500
+Subject: [PATCH 2/2] added aux print
+
+---
+ train_network.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/train_network.py b/train_network.py
+index 087eb7f..d9ae2fa 100644
+--- a/train_network.py
++++ b/train_network.py
+@@ -132,6 +132,8 @@ class NetworkTrainer:
+         for param in network.parameters():
+             if param.grad is not None:
+                 print(f"Size of param.grad before reduction: {param.grad.size()}")
++                aux = accelerator.reduce(param.grad, reduction="mean")
++                print(f"Size of aux param.grad after reduction: {aux.size()}")
+                 param.grad = accelerator.reduce(param.grad, reduction="mean")
+                 print(f"Size of param.grad after reduction: {param.grad.size()}")
+ 
+-- 
+2.39.3 (Apple Git-145)
+
